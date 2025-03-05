@@ -34,10 +34,10 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-purple-50 to-blue-100 min-h-screen flex flex-col">
+<body class="bg-gradient-to-br from-pink-50 to-pink-100 min-h-screen flex flex-col">
     <div class="container mx-auto max-w-2xl px-4 py-8 flex-grow">
         <div class="bg-white shadow-2xl rounded-xl overflow-hidden flex flex-col h-[calc(100vh-200px)]">
-            <div class="bg-gradient-to-r from-purple-600 to-blue-500 text-white p-4 flex items-center">
+            <div class="bg-gradient-to-r from-pink-600 to-pink-400 text-white p-4 flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
@@ -59,13 +59,13 @@
                         type="text" 
                         id="message" 
                         placeholder="Type your message..." 
-                        class="flex-grow p-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                        class="flex-grow p-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
                     >
                     <button 
                         type="button" 
                         id="sendButton"
                         onclick="sendMessage()" 
-                        class="bg-gradient-to-r from-purple-600 to-blue-500 text-white p-3 rounded-full hover:from-purple-700 hover:to-blue-600 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                        class="bg-gradient-to-r from-pink-600 to-pink-400 text-white p-3 rounded-full hover:from-pink-700 hover:to-pink-500 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -88,12 +88,16 @@
         }
 
         function sendMessage() {
-            var userMessage = document.getElementById("message").value;
-            if (!userMessage.trim()) return;
+            var messageInput = document.getElementById("message");
+            var userMessage = messageInput.value.trim();
+            if (!userMessage) return;
+
+            // Store the user message and clear the input immediately
+            const originalMessage = userMessage;
+            messageInput.value = '';
 
             // Disable send button and show loading state
             const sendButton = document.getElementById("sendButton");
-            const messageInput = document.getElementById("message");
             sendButton.disabled = true;
             messageInput.disabled = true;
 
@@ -103,8 +107,8 @@
             const userMessageEl = document.createElement("div");
             userMessageEl.className = "flex justify-end mb-4";
             userMessageEl.innerHTML = `
-                <div class="bg-purple-500 text-white rounded-xl p-3 max-w-[80%] shadow-sm">
-                    <p>${userMessage}</p>
+                <div class="bg-pink-500 text-white rounded-xl p-3 max-w-[80%] shadow-sm">
+                    <p>${originalMessage}</p>
                 </div>
             `;
             chatContainer.appendChild(userMessageEl);
@@ -128,7 +132,7 @@
                     "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
                     "Content-Type": "application/x-www-form-urlencoded"
                 },
-                body: new URLSearchParams({ "message": userMessage })
+                body: new URLSearchParams({ "message": originalMessage })
             })
             .then(response => response.json())
             .then(data => {
@@ -145,8 +149,7 @@
                 `;
                 chatContainer.appendChild(botResponseEl);
 
-                // Clear input and scroll to bottom
-                messageInput.value = "";
+                // Scroll to bottom
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             })
             .catch(error => {
