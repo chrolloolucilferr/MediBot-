@@ -3,7 +3,7 @@ from django.http import JsonResponse
 import google.generativeai as genai
 
 # Configure Gemini API
-API_KEY = "AIzaSyCezVSzqVz8cri8Jfzvuf4EEHqHUWi_tzs"
+API_KEY = "Inser_Your_APIkey_here"
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel("gemini-1.5-pro-latest")
 
