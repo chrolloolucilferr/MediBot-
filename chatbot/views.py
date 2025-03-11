@@ -6,7 +6,7 @@ import re
 
 
 # Configure Gemini API
-API_KEY = "AIzaSyA6kniv3sGE4yvwn7-Lkelvg5-6hmM_s2I"
+API_KEY = "Insert_Your_API_Key"
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel("gemini-1.5-pro-latest")
 
